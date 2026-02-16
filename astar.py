@@ -124,7 +124,15 @@ def astar(maze, start, end):
     return (-1, "NULL", nodes_created, duration_ms)
             
     
+def read_map_from_string(map_string):
+    # Split the string into lines and strip whitespace
+    lines = map_string.strip().split('\n')
     
+    # Convert each character in each line into an integer
+    # 0 = Impassable, 1-5 = Varying costs
+    maze =[[int(char) for char in line.strip()] for line in lines]
+    
+    return maze    
 
 
 def main():
