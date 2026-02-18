@@ -1,3 +1,86 @@
+# MAPS [(map_string, start_coord, goal_coord)...]
+MAPS = [
+    # MAP 1
+    ("""
+        2421452
+        0123531
+        2044124
+        2553201
+        4332101
+     """,
+        (1, 2),
+        (4, 3)
+    ),
+    
+    # MAP 2
+    ("""
+        1325143
+        2131325
+        3050122
+        5321503
+        2410020
+        4021534
+        1510241
+     """,
+        (3, 6),
+        (5, 1)
+    ),
+    
+    # MAP 3
+    ("""
+        2020200220
+        1235212512
+        2022121242
+        2010111001
+        1100503222
+        2222101210
+        1021314301
+        2051521241
+        1222020110
+        5121112012
+     """,
+        (1, 2),
+        (8, 8)
+    ),
+    
+    # MAP 4
+    ("""
+        1111111311
+        1234501234
+        1111111111
+        1010101010
+        1133431111
+        1098765432
+        1111111111
+        1010101010
+        1114201111
+        1111111111
+     """,
+        (0, 0),
+        (9, 9)
+    ),
+    
+    
+    # MAP 5
+    ("""
+        3453453453
+        2120122122
+        3453453053
+        2122122122
+        3453053053
+        2122122022
+        3453050403
+        2120122122
+        3403053453
+        2122122122
+     """,
+        (0, 0),
+        (9, 9)
+    )
+]
+
+
+
 class Node():
     """A node class for A* Pathfinding"""
 
@@ -130,33 +213,23 @@ def read_map_from_string(map_string):
     
     # Convert each character in each line into an integer
     # 0 = Impassable, 1-5 = Varying costs
-    maze =[[int(char) for char in line.strip()] for line in lines]
-    
-    return maze    
-
+    return [[int(char) for char in line.strip()] for line in lines] 
 
 def main():
 
-    maze = [
-    [1, 5, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 5, 1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 5, 1, 0, 1, 1, 1, 1, 0, 1],
-    [1, 5, 1, 0, 1, 0, 0, 1, 0, 1],
-    [1, 5, 1, 0, 1, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
+    maze = read_map_from_string(MAPS[0][0])
     
 # Start: (0,0), End: (4,5)
 
-    start = (0, 0)
-    end = (8, 0)
+    start = MAPS[0][1]
+    end = MAPS[0][2]
 
-    path = astar(maze, start, end)
-    print(path)
+    result = astar(maze, start, end)
+    
+    print(f"1) Path Cost: {result[0]}")
+    print(f"2) Path: {result[1]}")
+    print(f"3) Nodes Created: {result[2]}")
+    print(f"4) Runtime: {round(result[3],4)} ms")
 
 
 if __name__ == '__main__':
