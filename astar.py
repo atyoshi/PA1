@@ -1,3 +1,6 @@
+import sys
+import random
+import math
 # MAPS [(map_string, start_coord, goal_coord)...]
 MAPS = [
     # MAP 1
@@ -97,7 +100,21 @@ class Node():
 
 import time
 
-def astar(maze, start, end):
+def h_func(child, end_node, heuristic):
+    manhattan = abs((child.position[0] - end_node.position[0])) + abs((child.position[1] - end_node.position[1]))
+    if heuristic == 1:
+        return 0
+    if heuristic == 2:
+        return manhattan
+    if heuristic == 3:
+        return math.sqrt((child.position[0] - end_node.position[0])**2 + (child.position[1] - end_node.position[1])**2)
+    if heuristic == 4:
+        error = random.choice([-3,-2,-1,1,2,3])
+        if manhattan - error < 0:
+            return 0
+        return manhattan - error
+
+def astar(maze, start, end, heuristic):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
     
     # Start stopwatch
@@ -185,7 +202,7 @@ def astar(maze, start, end):
 
             # Create the f, g, and h values
             child.g = current_node.g + maze[child.position[0]][child.position[1]]
-            child.h = abs((child.position[0] - end_node.position[0])) + abs((child.position[1] - end_node.position[1]))
+            child.h = h_func(child,end_node, heuristic)
             child.f = child.g + child.h
 
             # Child is already in the open list
@@ -218,6 +235,9 @@ def read_map_from_string(map_string):
 def main():
 
     maze = read_map_from_string(MAPS[0][0])
+    
+    map_choice = int(sys.argv[1]) - 1
+    heuristic_choice = int(sys.argv[2])
     
 # Start: (0,0), End: (4,5)
 
