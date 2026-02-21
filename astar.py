@@ -83,7 +83,6 @@ MAPS = [
 ]
 
 
-
 class Node():
     """A node class for A* Pathfinding"""
 
@@ -101,18 +100,18 @@ class Node():
 import time
 
 def h_func(child, end_node, heuristic):
+    # Manhattan Distance
     manhattan = abs((child.position[0] - end_node.position[0])) + abs((child.position[1] - end_node.position[1]))
-    if heuristic == 1:
+    
+    if heuristic == 1: # H1: All Zeros
         return 0
-    if heuristic == 2:
+    if heuristic == 2: # H2: Manhattan Distance
         return manhattan
-    if heuristic == 3:
+    if heuristic == 3: # H3: Euclidean Distance (Custom)
         return math.sqrt((child.position[0] - end_node.position[0])**2 + (child.position[1] - end_node.position[1])**2)
-    if heuristic == 4:
+    if heuristic == 4: # H4: Manhattan Distance - Error
         error = random.choice([-3,-2,-1,1,2,3])
-        if manhattan - error < 0:
-            return 0
-        return manhattan - error
+        return max(0, manhattan + error)
 
 def astar(maze, start, end, heuristic):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
@@ -134,7 +133,7 @@ def astar(maze, start, end, heuristic):
     open_list.append(start_node)
     
     # Nodes Created
-    nodes_created = 2
+    nodes_created = 1
 
     # Loop until you find the end
     while len(open_list) > 0:
@@ -233,18 +232,22 @@ def read_map_from_string(map_string):
     return [[int(char) for char in line.strip()] for line in lines] 
 
 def main():
+    # Ensure user provides enough arguments
+    if len(sys.argv) < 3:
+        print("Usage: python script.py [map_number 1-5] [heuristic_number 1-4]")
+        return
 
-    maze = read_map_from_string(MAPS[0][0])
-    
+    # Map choice (1-5) and Heuristic choice (1-4)
     map_choice = int(sys.argv[1]) - 1
     heuristic_choice = int(sys.argv[2])
     
-# Start: (0,0), End: (4,5)
+    # Map Selection
+    maze = read_map_from_string(MAPS[map_choice][0])
+    start = MAPS[map_choice][1]
+    end = MAPS[map_choice][2]
 
-    start = MAPS[0][1]
-    end = MAPS[0][2]
-
-    result = astar(maze, start, end)
+    # A* with Chosen Heuristic
+    result = astar(maze, start, end, heuristic_choice)
     
     print(f"1) Path Cost: {result[0]}")
     print(f"2) Path: {result[1]}")
